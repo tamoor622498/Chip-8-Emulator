@@ -64,7 +64,7 @@ void Chip8::ROM(string filename){
 		// File data loaded into buffer
 		file.close();
 
-		for (auto i = 0; i < size; i++)
+		for (unsigned int i = 0; i < size; i++)
 		{
 			memory[START_ADDRESS + i] = buffer[i];
 		}
@@ -79,6 +79,163 @@ void Chip8::ROM(string filename){
 
 
 void Chip8::Cycle() {
+	
+}
+
+void Chip8::OP_00E0() {
+	for (unsigned int i = 0; i < (VIDEO_HEIGHT * VIDEO_WIDTH); i++)
+		{
+			video[i] = 0; // 0  = black square
+		}
+}
+// Clears the screen
+void Chip8::OP_00EE() {
+	--sp;
+	pc = stack[sp];
+}
+// Top of stack has address of one instruction past we need.
+// Program counter set to top of stack.
+void Chip8::OP_1nnn() {
+	uint16_t address = opcode & 0x0FFFu;
+	pc = address;
+}
+// Using bit masking, grab the address nnn.
+// Set program counter to nnn.
+void Chip8::OP_2nnn() {
+	uint16_t address = opcode & 0x0FFFu;
+
+	stack[sp] = pc;
+	++sp;
+	pc = address;
+}
+// Using bit masking grab address nnn.
+// Current instruction put on stack.
+// sp moved up.
+// Program counter set to address.
+void Chip8::OP_3xkk()
+{
 
 }
+
+void Chip8::OP_4xkk()
+{
+}
+
+void Chip8::OP_5xy0()
+{
+}
+
+void Chip8::OP_6xkk()
+{
+}
+
+void Chip8::OP_7xkk()
+{
+}
+
+void Chip8::OP_8xy0()
+{
+}
+
+void Chip8::OP_8xy1()
+{
+}
+
+void Chip8::OP_8xy2()
+{
+}
+
+void Chip8::OP_8xy3()
+{
+}
+
+void Chip8::OP_8xy4()
+{
+}
+
+void Chip8::OP_8xy5()
+{
+}
+
+void Chip8::OP_8xy6()
+{
+}
+
+void Chip8::OP_8xy7()
+{
+}
+
+void Chip8::OP_8xyE()
+{
+}
+
+void Chip8::OP_9xy0()
+{
+}
+
+void Chip8::OP_Annn()
+{
+}
+
+void Chip8::OP_Bnnn()
+{
+}
+
+void Chip8::OP_Cxkk()
+{
+}
+
+void Chip8::OP_Dxyn()
+{
+}
+
+void Chip8::OP_Ex9E()
+{
+}
+
+void Chip8::OP_ExA1()
+{
+}
+
+void Chip8::OP_Fx07()
+{
+}
+
+void Chip8::OP_Fx0A()
+{
+}
+
+void Chip8::OP_Fx15()
+{
+}
+
+void Chip8::OP_Fx18()
+{
+}
+
+void Chip8::OP_Fx1E()
+{
+}
+
+void Chip8::OP_Fx29()
+{
+}
+
+void Chip8::OP_Fx33()
+{
+}
+
+void Chip8::OP_Fx55()
+{
+}
+
+void Chip8::OP_Fx65()
+{
+}
+
+void Chip8::OP_NULL()
+{
+
+}
+
 
