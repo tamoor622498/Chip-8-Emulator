@@ -1,63 +1,84 @@
 #define OLC_PGE_APPLICATION
 #include "olcPixelGameEngine.h"
+#include "Chip-8.h"
+
+
+using namespace std;
+
 
 // Override base class with your custom functionality
-class Example : public olc::PixelGameEngine
+class Platform : public olc::PixelGameEngine
 {
 public:
-	Example()
+	Chip8 emu;
+	float timecounter = 0;
+	float delay = 1/500.0f;
+	Platform()
 	{
 		// Name you application
-		sAppName = "Example";
+		sAppName = "Chip-8 Emulator";
 	}
 
 public:
 	bool OnUserCreate() override
 	{
-		int array[64*32];
-		int d[64][32];
+		emu.init();
+		emu.ROM("TETRIS.ch8");
 
-		for (int i = 0; i < (64*32); i++)
-		{
-			array[i] = (i+1) % 2;
-		}
-
-		int i = 0;
-
-		for (int k = 0; k < 64; k++)
-		{
-			for (int j = 0; j < 32; j++)
-			{
-				d[k][j] = array[i];
-				i++;
-			}
-		}
-
-		for (int k = 0; k < 64; k++)
-		{
-			for (int j = 0; j < 32; j++)
-			{
-				if (d[k][j] == 0) {
-					Draw(k, j, olc::Pixel(0, 0, 0));
-				}
-				else {
-					Draw(k, j, olc::Pixel(255, 255, 255));
-				}
-			}
-		}
 		// Called once at the start, so create things here
 		return true;
 	}
 
-	bool OnUserUpdate(float fElapsedTime) override
+
+
+	bool ProcessInput(uint8_t* keys) {
+		bool quit = false;
+
+	}
+
+	bool OnUserUpdate(float fElapsedTime) override {
+	uint32_t vid[32][64];
+
+	timecounter += fElapsedTime;
+	if (timecounter >= delay)
 	{
+		
+		emu.Cycle();
+
+		int i = 0;
+		for (int k = 0; k < 32; k++)
+		{
+			for (int j = 0; j < 64; j++)
+			{
+				vid[k][j] = emu.video[i];
+				i++;
+			}
+		}
+		
+
+
+		for (int k = 0; k < 32; k++)
+		{
+			for (int j = 0; j < 64; j++)
+			{
+				if (vid[k][j] == 0xFFFFFFFF) {
+					Draw(j, k, olc::Pixel(255, 255, 255));
+				}
+				else {
+					Draw(j, k, olc::Pixel(0, 0, 0));
+				}
+			}
+		}
+		timecounter -= delay;
+	}
+	
 		return true;
 	}
 };
 
 int main()
 {
-	Example demo;
+	Platform demo;
 	if (demo.Construct(64, 32, 25, 25))
 		demo.Start();
 	return 0;

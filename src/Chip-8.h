@@ -4,6 +4,8 @@
 #include <iostream>
 #include <fstream>
 #include <cstdint>
+#include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 #include <string>
 
@@ -19,10 +21,11 @@ const unsigned int START_ADDRESS = 0x200;
 const unsigned int FONTSET_SIZE = 80;
 const unsigned int FONTSET_START_ADDRESS = 0x50;
 
-class Chip8 : public olc::PixelGameEngine {
+class Chip8 {
 public:
 	Chip8();
 	// Start up.
+	void init();
 	void ROM(string filename);
 	// Reads in rom.
 	void Cycle();
@@ -39,19 +42,19 @@ public:
 	// 0X000 - 0X1FF = Chip-8 Interpreter.
 	// 0X050 - 0X0A0 = Storage space for the 16 (hex) characters.
 	// 0X200 - 0XFFF = Storage of loaded rom.
-	uint16_t indexReg;
-	// Stores memory addresses/
+	uint16_t indexReg = 0;
+	// Stores memory addresses
 	uint16_t pc = 0x200;
 	// Holds the instructions to execute, starting at 0X200.
 	uint16_t stack[STACK_LEVELS];
 	// CALLS pc addess pushed to stack. RET pc addess popped
-	uint8_t sp;
+	uint8_t sp = 0;
 	// Stack "pointer".
-	uint8_t delayTimer;
+	uint8_t delayTimer = 0;
 	// Decs at 60Hz. Controls game speed.
-	uint8_t soundTimer;
+	uint8_t soundTimer = 0;
 	// Decs at 60Hz. Emits sound when not 0.
-	uint16_t opcode;
+	uint16_t opcode = 0;
 	// The instruction being executed
 
 
