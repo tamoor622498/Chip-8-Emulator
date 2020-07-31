@@ -258,6 +258,7 @@ void Chip8::Cycle() {
 	}
 	// Decaments delay timer.
 	if (soundTimer > 0) {
+		cout << '\a';
 		--soundTimer;
 	}
 	// Decrements sound timer.
@@ -485,6 +486,17 @@ void Chip8::OP_Dxyn() {
 
 	uint8_t xPos = reg[Vx] % VIDEO_WIDTH;
 	uint8_t yPos = reg[Vy] % VIDEO_HEIGHT;
+
+	//uint8_t xPos = reg[Vx];
+	//uint8_t yPos = reg[Vy];
+
+	//if (xPos > VIDEO_WIDTH || xPos < 0) {
+	//	xPos = VIDEO_WIDTH/2;
+	//}
+	//if (yPos > VIDEO_HEIGHT || yPos < 0) {
+	//	yPos = VIDEO_HEIGHT-3;
+	//}
+
 
 	reg[0xF] = 0;
 
