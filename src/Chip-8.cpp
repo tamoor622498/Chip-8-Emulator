@@ -3,7 +3,7 @@
 using namespace std;
 
 Chip8::Chip8() {
-
+	
 }
 
 void Chip8::init() {
@@ -122,6 +122,7 @@ void Chip8::Cycle() {
 	// pc incremented.
 
 	switch (opcode & 0xF000) {
+	// Gets the first part of the op code.
 	case 0x1000:
 		OP_1nnn();
 		break;
@@ -161,6 +162,8 @@ void Chip8::Cycle() {
 	case 0x8000:
 
 		switch (opcode & 0x000F) {
+		// If the op code starts with 8.
+		// Look at the last character.
 		case 0x0000:
 			OP_8xy0();
 			break;
@@ -194,8 +197,12 @@ void Chip8::Cycle() {
 			exit(0);
 		}
 		break;
+
 	case 0x0000:
+
 		switch (opcode & 0x000F) {
+		// If the op code starts with 0.
+		// Look at last part.
 		case 0x0000:
 			OP_00E0();
 			break;
@@ -207,8 +214,12 @@ void Chip8::Cycle() {
 			exit(0);
 		}
 		break;
+
 	case 0xE000:
+
 		switch (opcode & 0x00FF) {
+		// If the op code starts with E.
+		// Look at last 2 letters.
 		case 0x00A1:
 			OP_ExA1();
 			break;
@@ -220,8 +231,12 @@ void Chip8::Cycle() {
 			exit(0);
 		}
 		break;
+
 	case 0xF000:
+
 		switch (opcode & 0x00FF) {
+		// If the op code starts with F.
+		// Look at last part.
 		case 0x0007:
 			OP_Fx07();
 			break;
@@ -254,6 +269,7 @@ void Chip8::Cycle() {
 			exit(0);;
 		}
 		break;
+
 	default:
 		printf("\n Invalid op code: %.4X\n", opcode);
 		exit(0);
@@ -504,7 +520,7 @@ void Chip8::OP_Cxkk() {
 	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
 	uint8_t byte = opcode & 0x00FFu;
 
-	reg[Vx] = (rand() % 256u) + byte;
+	reg[Vx] = (rand() % 255u) & byte;
 }
 // Grab Vx and kk through bit masking.
 // reg Vx is equal a random number between 0 255 and kk
@@ -516,18 +532,8 @@ void Chip8::OP_Dxyn() {
 
 	reg[0xF] = 0;
 
-	/*uint8_t xPos = reg[Vx] % VIDEO_WIDTH;
-	uint8_t yPos = reg[Vy] % VIDEO_HEIGHT;*/
-
-	uint8_t xPos = reg[Vx];
-	uint8_t yPos = reg[Vy];
-
-	if (xPos > VIDEO_WIDTH || xPos < 0) {
-		return;
-	}
-	if (yPos > VIDEO_HEIGHT || yPos < 0) {
-		return;
-	}
+	uint8_t xPos = reg[Vx] % VIDEO_WIDTH;
+	uint8_t yPos = reg[Vy] % VIDEO_HEIGHT;
 
 	for (unsigned int row = 0; row < height; ++row)
 	{

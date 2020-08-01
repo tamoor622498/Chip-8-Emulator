@@ -10,10 +10,13 @@ class Platform : public olc::PixelGameEngine
 public:
 	Chip8 emu;
 	// Emulator object
+
 	float timecounter = 0;
 	// timer
-	float delay = 0.0021f;
+
+	float delay = 1.0/240.0f;
 	// Length of delay
+
 	Platform()
 	{
 		sAppName = "Chip-8 Emulator";
@@ -22,9 +25,12 @@ public:
 
 	bool OnUserCreate() override
 	{
-		emu.init(); // Initialized emulator
-		emu.ROM("Missile [David Winter].ch8");
+		emu.init();
+		// Initialized emulator
+
+		emu.ROM("ROMS/IBM Logo.ch8");
 		// ROM loaded
+
 		return true;
 	}
 	// Called once at the start.
@@ -160,17 +166,22 @@ public:
 
 		timecounter += fElapsedTime;
 		// Adds time passed.
+
 		if (timecounter >= delay)
 		{ // Only runs when enough time hsa passed.
+
 			bool q = ProcessInput(emu.keypad);
 			// Ret true if escape key is pressed.
+
 			if (q) {
 				exit(0);
 				cout << endl;
 			}
 			// Exits if escape is pressesd.
+
 			emu.Cycle();
 			// Runs opcode
+
 			int i = 0;
 			for (int k = 0; k < 32; k++)
 			{
@@ -186,6 +197,7 @@ public:
 				}
 			}
 			// Single array to 2D array.
+
 			timecounter -= delay;
 			// Resets timer
 		}
@@ -197,7 +209,7 @@ public:
 int main()
 {
 	Platform out;
-	if (out.Construct(64, 32, 25, 25, false, false))
+	if (out.Construct(64, 32, 25, 25, false, false, true))
 		out.Start();
 	return 0;
 }
