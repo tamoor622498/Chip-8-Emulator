@@ -2,47 +2,47 @@
 #include "olcPixelGameEngine.h"
 #include "Chip-8.h"
 
-
 using namespace std;
 
-
-// Override base class with your custom functionality
 class Platform : public olc::PixelGameEngine
+// Engine functionality inherated.
 {
 public:
 	Chip8 emu;
+	// Emulator object
 	float timecounter = 0;
+	// timer
 	float delay = 0.0021f;
+	// Length of delay
 	Platform()
 	{
-		// Name you application
 		sAppName = "Chip-8 Emulator";
+		// Application name.
 	}
 
-public:
 	bool OnUserCreate() override
 	{
-		emu.init();
-		emu.ROM("Brick (Brix hack, 1990).ch8");
-
-		// Called once at the start, so create things here
+		emu.init(); // Initialized emulator
+		emu.ROM("Missile [David Winter].ch8");
+		// ROM loaded
 		return true;
 	}
-
-
+	// Called once at the start.
 
 	bool ProcessInput(uint8_t* keys) {
 		bool quit = false;
 
 		if (GetKey(olc::Key::ESCAPE).bPressed || GetKey(olc::Key::ESCAPE).bHeld) {
 			quit = true;
-		} else {
+		}
+		else {
 			quit = false;
 		}
 
 		if (GetKey(olc::Key::X).bPressed || GetKey(olc::Key::X).bHeld) {
 			keys[0] = 1;
-		} else {
+		}
+		else {
 			keys[0] = 0;
 		}
 
@@ -153,63 +153,51 @@ public:
 
 		return quit;
 	}
+	// Maps the buttons to the Chip-8 keypad.
+	// If a button is pressed or held, one is loaded into the array.
 
 	bool OnUserUpdate(float fElapsedTime) override {
-	uint32_t vid[32][64];
 
-	timecounter += fElapsedTime;
-	if (timecounter >= delay)
-	{
-		bool q = ProcessInput(emu.keypad);
-
-		if (q) {
-			exit(0);
-			cout << endl;
-		}
-
-		emu.Cycle();
-
-		int i = 0;
-		for (int k = 0; k < 32; k++)
-		{
-			for (int j = 0; j < 64; j++)
-			{
-				/*vid[k][j] = emu.video[i];*/
-				if (emu.video[i] == 0xFFFFFFFF) {
-							Draw(j, k, olc::Pixel(255, 255, 255));
-						}
-						else {
-							Draw(j, k, olc::Pixel(0, 0, 0));
-						}
-				i++;
+		timecounter += fElapsedTime;
+		// Adds time passed.
+		if (timecounter >= delay)
+		{ // Only runs when enough time hsa passed.
+			bool q = ProcessInput(emu.keypad);
+			// Ret true if escape key is pressed.
+			if (q) {
+				exit(0);
+				cout << endl;
 			}
+			// Exits if escape is pressesd.
+			emu.Cycle();
+			// Runs opcode
+			int i = 0;
+			for (int k = 0; k < 32; k++)
+			{
+				for (int j = 0; j < 64; j++)
+				{
+					if (emu.video[i] == 0xFFFFFFFF) {
+						Draw(j, k, olc::Pixel(255, 255, 255));
+					}
+					else {
+						Draw(j, k, olc::Pixel(0, 0, 0));
+					}
+					i++;
+				}
+			}
+			// Single array to 2D array.
+			timecounter -= delay;
+			// Resets timer
 		}
-		
 
-
-		//for (int k = 0; k < 32; k++)
-		//{
-		//	for (int j = 0; j < 64; j++)
-		//	{
-		//		if (vid[k][j] == 0xFFFFFFFF) {
-		//			Draw(j, k, olc::Pixel(255, 255, 255));
-		//		}
-		//		else {
-		//			Draw(j, k, olc::Pixel(0, 0, 0));
-		//		}
-		//	}
-		//}
-		timecounter -= delay;
-	}
-	
 		return true;
 	}
 };
 
 int main()
 {
-	Platform demo;
-	if (demo.Construct(64, 32, 25, 25, false, false))
-		demo.Start();
+	Platform out;
+	if (out.Construct(64, 32, 25, 25, false, false))
+		out.Start();
 	return 0;
 }

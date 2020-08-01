@@ -12,10 +12,13 @@ void Chip8::init() {
 
 	pc = 0x200;
 	// starting at addres of first op (0x200).
+
 	opcode = 0;
 	// Opcode reset;
+
 	indexReg = 0;
 	// Index register reset.
+
 	sp = 0;
 	// Stack pointer reset
 
@@ -24,16 +27,19 @@ void Chip8::init() {
 		memory[i] = 0;
 	}
 	// Clearing display.
+
 	for (auto i = 0; i < STACK_LEVELS; i++)
 	{
 		stack[i] = 0;
 	}
 	// Clearing stack.
+
 	for (auto i = 0; i < REGISTER_COUNT; i++)
 	{
 		reg[i] = 0;
 	}
 	// Clearing registers
+
 	for (auto i = 0; i < MEMORY_SIZE; i++)
 	{
 		memory[i] = 0;
@@ -116,147 +122,149 @@ void Chip8::Cycle() {
 	// pc incremented.
 
 	switch (opcode & 0xF000) {
-		case 0x1000:
-			OP_1nnn();
-			break;
-		case 0x2000:
-			OP_2nnn();
-			break;
-		case 0x3000:
-			OP_3xkk();
-			break;
-		case 0x4000:
-			OP_4xkk();
-			break;
-		case 0x5000:
-			OP_5xy0();
-			break;
-		case 0x6000:
-			OP_6xkk();
-			break;
-		case 0x7000:
-			OP_7xkk();
-			break;
-		case 0x9000:
-			OP_9xy0();
-			break;
-		case 0xA000:
-			OP_Annn();
-			break;
-		case 0xB000:
-			OP_Bnnn();
-			break;
-		case 0xC000:
-			OP_Cxkk();
-			break;
-		case 0xD000:
-			OP_Dxyn();
-			break;
-		case 0x8000:
+	case 0x1000:
+		OP_1nnn();
+		break;
+	case 0x2000:
+		OP_2nnn();
+		break;
+	case 0x3000:
+		OP_3xkk();
+		break;
+	case 0x4000:
+		OP_4xkk();
+		break;
+	case 0x5000:
+		OP_5xy0();
+		break;
+	case 0x6000:
+		OP_6xkk();
+		break;
+	case 0x7000:
+		OP_7xkk();
+		break;
+	case 0x9000:
+		OP_9xy0();
+		break;
+	case 0xA000:
+		OP_Annn();
+		break;
+	case 0xB000:
+		OP_Bnnn();
+		break;
+	case 0xC000:
+		OP_Cxkk();
+		break;
+	case 0xD000:
+		OP_Dxyn();
+		break;
+	case 0x8000:
 
-			switch (opcode & 0x000F) {
-				case 0x0000:
-					OP_8xy0();
-					break;
-				case 0x0001:
-					OP_8xy1();
-					break;
-				case 0x0002:
-					OP_8xy2();
-					break;
-				case 0x0003:
-					OP_8xy3();
-					break;
-				case 0x0004:
-					OP_8xy4();
-					break;
-				case 0x0005:
-					OP_8xy5();
-					break;
-				case 0x0006:
-					OP_8xy6();
-					break;
-				case 0x0007:
-					OP_8xy7();
-					break;
-				case 0x000E:
-					OP_8xyE();
-					break;
-
-			default:
-				printf("\n Invalid op code: %.4X\n", opcode);
-				exit(0);
-			}
-			break;
+		switch (opcode & 0x000F) {
 		case 0x0000:
-			switch (opcode & 0x000F) {
-				case 0x0000:
-					OP_00E0();
-					break;
-				case 0x000E:
-					OP_00EE();
-					break;
-			default:
-				printf("\n Invalid op code: %.4X\n", opcode);
-				exit(0);
-			}
+			OP_8xy0();
 			break;
-		case 0xE000:
-			switch (opcode & 0x00FF) {
-				case 0x00A1:
-					OP_ExA1();
-					break;
-				case 0x009E:
-					OP_Ex9E();
-					break;
-			default:
-				printf("\n Invalid op code: %.4X\n", opcode);
-				exit(0);
-			}
+		case 0x0001:
+			OP_8xy1();
 			break;
-		case 0xF000:
-			switch (opcode & 0x00FF) {
-				case 0x0007:
-					OP_Fx07();
-					break;
-				case 0x000A:
-					OP_Fx0A();
-					break;
-				case 0x0015:
-					OP_Fx15();
-					break;
-				case 0x0018:
-					OP_Fx18();
-					break;
-				case 0x001E:
-					OP_Fx1E();
-					break;
-				case 0x0029:
-					OP_Fx29();
-					break;
-				case 0x0033:
-					OP_Fx33();
-					break;
-				case 0x0055:
-					OP_Fx55();
-					break;
-				case 0x0065:
-					OP_Fx65();
-					break;
-			default:
-				printf("\n Invalid op code: %.4X\n", opcode);
-				exit(0);;
-			}
+		case 0x0002:
+			OP_8xy2();
 			break;
+		case 0x0003:
+			OP_8xy3();
+			break;
+		case 0x0004:
+			OP_8xy4();
+			break;
+		case 0x0005:
+			OP_8xy5();
+			break;
+		case 0x0006:
+			OP_8xy6();
+			break;
+		case 0x0007:
+			OP_8xy7();
+			break;
+		case 0x000E:
+			OP_8xyE();
+			break;
+
+		default:
+			printf("\n Invalid op code: %.4X\n", opcode);
+			exit(0);
+		}
+		break;
+	case 0x0000:
+		switch (opcode & 0x000F) {
+		case 0x0000:
+			OP_00E0();
+			break;
+		case 0x000E:
+			OP_00EE();
+			break;
+		default:
+			printf("\n Invalid op code: %.4X\n", opcode);
+			exit(0);
+		}
+		break;
+	case 0xE000:
+		switch (opcode & 0x00FF) {
+		case 0x00A1:
+			OP_ExA1();
+			break;
+		case 0x009E:
+			OP_Ex9E();
+			break;
+		default:
+			printf("\n Invalid op code: %.4X\n", opcode);
+			exit(0);
+		}
+		break;
+	case 0xF000:
+		switch (opcode & 0x00FF) {
+		case 0x0007:
+			OP_Fx07();
+			break;
+		case 0x000A:
+			OP_Fx0A();
+			break;
+		case 0x0015:
+			OP_Fx15();
+			break;
+		case 0x0018:
+			OP_Fx18();
+			break;
+		case 0x001E:
+			OP_Fx1E();
+			break;
+		case 0x0029:
+			OP_Fx29();
+			break;
+		case 0x0033:
+			OP_Fx33();
+			break;
+		case 0x0055:
+			OP_Fx55();
+			break;
+		case 0x0065:
+			OP_Fx65();
+			break;
+		default:
+			printf("\n Invalid op code: %.4X\n", opcode);
+			exit(0);;
+		}
+		break;
 	default:
 		printf("\n Invalid op code: %.4X\n", opcode);
 		exit(0);
 	}
 	// Massive Switch statement to decode and run opcodes.
+
 	if (delayTimer > 0) {
 		--delayTimer;
 	}
 	// Decaments delay timer.
+
 	if (soundTimer > 0) {
 		cout << '\a';
 		--soundTimer;
@@ -271,18 +279,21 @@ void Chip8::OP_00E0() {
 	}
 }
 // Clears the screen
+
 void Chip8::OP_00EE() {
 	--sp;
 	pc = stack[sp];
 }
 // Top of stack has address of one instruction past we need.
 // Program counter set to top of stack.
+
 void Chip8::OP_1nnn() {
 	uint16_t address = opcode & 0x0FFFu;
 	pc = address;
 }
 // Using bit masking, grab the address nnn.
 // Set program counter to nnn.
+
 void Chip8::OP_2nnn() {
 	uint16_t address = opcode & 0x0FFFu;
 
@@ -294,6 +305,7 @@ void Chip8::OP_2nnn() {
 // Current instruction put on stack.
 // sp moved up.
 // Program counter set to address.
+
 void Chip8::OP_3xkk() {
 	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
 	uint8_t byte = (opcode & 0x00FFu);
@@ -305,6 +317,7 @@ void Chip8::OP_3xkk() {
 // Using bit masking, grab Vx and kk.
 // Then shift Vx left by 8 bits (reducing order).
 // If register Vx and kk equal, increment pc by 2.
+
 void Chip8::OP_4xkk() {
 	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
 	uint8_t byte = (opcode & 0x00FFu);
@@ -316,6 +329,7 @@ void Chip8::OP_4xkk() {
 // Using bit masking, grab Vx and kk.
 // Then shift Vx left by 8 bits (reducing order).
 // If register Vx and kk not equal, increment pc by 2.
+
 void Chip8::OP_5xy0() {
 	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
 	uint8_t Vy = (opcode & 0x00F0u) >> 4u;
@@ -327,6 +341,7 @@ void Chip8::OP_5xy0() {
 // Using bit masking, grab Vx and Vy.
 // Then shift Vx left by 8 bits and Vy by 4 (reducing order).
 // If register Vx and Vy equal, increment pc by 2.
+
 void Chip8::OP_6xkk() {
 	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
 	uint8_t byte = opcode & 0x00FFu;
@@ -335,6 +350,7 @@ void Chip8::OP_6xkk() {
 }
 // Bit mask x and kk. Need to shift Vx to reduce order.
 // Set Vx to byte
+
 void Chip8::OP_7xkk() {
 	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
 	uint8_t byte = opcode & 0x00FFu;
@@ -343,6 +359,7 @@ void Chip8::OP_7xkk() {
 }
 // Bit mask x and kk. Need to shift Vx to reduce order.
 // Add byte to Vx.
+
 void Chip8::OP_8xy0() {
 	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
 	uint8_t Vy = (opcode & 0x00F0u) >> 4u;
@@ -351,6 +368,7 @@ void Chip8::OP_8xy0() {
 }
 // Bit masking x and y then shifting to reduce order.
 // Set reg Vx equal to Vy.
+
 void Chip8::OP_8xy1() {
 	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
 	uint8_t Vy = (opcode & 0x00F0u) >> 4u;
@@ -359,6 +377,7 @@ void Chip8::OP_8xy1() {
 }
 //  Bit masking x and y then shifting to reduce order.
 // Set reg Vx equal to reg Vx OR Vy.
+
 void Chip8::OP_8xy2() {
 	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
 	uint8_t Vy = (opcode & 0x00F0u) >> 4u;
@@ -367,6 +386,7 @@ void Chip8::OP_8xy2() {
 }
 //  Bit masking x and y then shifting to reduce order.
 // Set reg Vx equal to reg Vx AND Vy.
+
 void Chip8::OP_8xy3() {
 	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
 	uint8_t Vy = (opcode & 0x00F0u) >> 4u;
@@ -375,6 +395,7 @@ void Chip8::OP_8xy3() {
 }
 //  Bit masking x and y then shifting to reduce order.
 // Set reg Vx equal to reg Vx XOR Vy.
+
 void Chip8::OP_8xy4() {
 	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
 	uint8_t Vy = (opcode & 0x00F0u) >> 4u;
@@ -395,6 +416,7 @@ void Chip8::OP_8xy4() {
 // If sum is greater than a byte (255 bits), carry flag is set.
 // Vf is the 16th register, 0xF = 16.
 // Vx is set to last 8 bits of sum, grab them by bit masking.
+
 void Chip8::OP_8xy5() {
 	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
 	uint8_t Vy = (opcode & 0x00F0u) >> 4u;
@@ -411,6 +433,7 @@ void Chip8::OP_8xy5() {
 // Vx and Vy are grabbed via bit shifting.
 // If Vx is greater than Vy, carry is set to 1, else 0;
 // Vx is set to Vx - Vy.
+
 void Chip8::OP_8xy6() {
 	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
 
@@ -421,6 +444,7 @@ void Chip8::OP_8xy6() {
 // vx is grabbed via bit masking.
 // The least signicant bit is saved in Vf.
 // reg Vx is divided by 2 via shifitng left by 1.
+
 void Chip8::OP_8xy7() {
 	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
 	uint8_t Vy = (opcode & 0x00F0u) >> 4u;
@@ -437,6 +461,7 @@ void Chip8::OP_8xy7() {
 // Vx and Vy are grabbed via bit shifting.
 // If Vy is greater than Vx, carry is set to 1, else 0;
 // Vx is set to Vy - Vx.
+
 void Chip8::OP_8xyE() {
 	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
 
@@ -447,6 +472,7 @@ void Chip8::OP_8xyE() {
 // Vx is grabbed via bit masking.
 // Most significant bit is grabbed and shifted to left, saved in carry.
 // Vx is multiplied by shifting right by 1.
+
 void Chip8::OP_9xy0() {
 	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
 	uint8_t Vy = (opcode & 0x00F0u) >> 4u;
@@ -457,6 +483,7 @@ void Chip8::OP_9xy0() {
 }
 // Grab Vx and Vy through bit masking.
 // If Vx and Vy not equal, skip next instruction.
+
 void Chip8::OP_Annn() {
 	uint16_t address = opcode & 0x0FFFu;
 
@@ -464,6 +491,7 @@ void Chip8::OP_Annn() {
 }
 // Get nnn through bit masking.
 // Set indexReg to nnn.
+
 void Chip8::OP_Bnnn() {
 	uint16_t address = opcode & 0x0FFFu;
 
@@ -471,6 +499,7 @@ void Chip8::OP_Bnnn() {
 }
 // Grab nnn via bit masking.
 // Jump to nnn + V0. V0 is the first register.
+
 void Chip8::OP_Cxkk() {
 	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
 	uint8_t byte = opcode & 0x00FFu;
@@ -479,26 +508,26 @@ void Chip8::OP_Cxkk() {
 }
 // Grab Vx and kk through bit masking.
 // reg Vx is equal a random number between 0 255 and kk
+
 void Chip8::OP_Dxyn() {
 	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
 	uint8_t Vy = (opcode & 0x00F0u) >> 4u;
 	uint8_t height = opcode & 0x000Fu;
 
-	uint8_t xPos = reg[Vx] % VIDEO_WIDTH;
-	uint8_t yPos = reg[Vy] % VIDEO_HEIGHT;
-
-	//uint8_t xPos = reg[Vx];
-	//uint8_t yPos = reg[Vy];
-
-	//if (xPos > VIDEO_WIDTH || xPos < 0) {
-	//	xPos = VIDEO_WIDTH/2;
-	//}
-	//if (yPos > VIDEO_HEIGHT || yPos < 0) {
-	//	yPos = VIDEO_HEIGHT-3;
-	//}
-
-
 	reg[0xF] = 0;
+
+	/*uint8_t xPos = reg[Vx] % VIDEO_WIDTH;
+	uint8_t yPos = reg[Vy] % VIDEO_HEIGHT;*/
+
+	uint8_t xPos = reg[Vx];
+	uint8_t yPos = reg[Vy];
+
+	if (xPos > VIDEO_WIDTH || xPos < 0) {
+		return;
+	}
+	if (yPos > VIDEO_HEIGHT || yPos < 0) {
+		return;
+	}
 
 	for (unsigned int row = 0; row < height; ++row)
 	{
@@ -679,5 +708,3 @@ void Chip8::OP_Fx65() {
 void Chip8::OP_NULL() {
 	// A whole bunch of nothing.
 }
-
-
